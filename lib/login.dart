@@ -1,36 +1,18 @@
-import 'package:email_auth/email_auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:thirdeye/auth_function.dart';
-import 'package:thirdeye/login.dart';
-import 'package:thirdeye/phone.dart';
+import 'package:thirdeye/otp.dart';
+import 'package:thirdeye/sign_up.dart';
 import 'package:thirdeye/splash_screen.dart';
 import 'package:thirdeye/widgets/textInput.dart';
 
 import '../../widgets/button.dart';
-import 'otp.dart';
 
-class SignUp extends StatelessWidget {
+class Login extends StatelessWidget {
   TextEditingController nameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
+  TextEditingController instituteController = TextEditingController();
+  TextEditingController idController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  EmailAuth emailAuth = new EmailAuth(sessionName: "Sample session");
-
-  void sendOtp() async {
-    bool result = await emailAuth.sendOtp(
-        recipientMail: emailController.text, otpLength: 5);
-    print(result);
-  }
-
-  // void verifyOtp(){
-  //   emailAuth.validateOtp(
-  //       recipientMail: emailcontroller.value.text,
-  //       userOtp: otpcontroller.value.text
-  //   )
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +23,7 @@ class SignUp extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 50.h,
+                height: 80.h,
               ),
               Padding(
                 padding:
@@ -64,7 +46,7 @@ class SignUp extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Sign-up',
+                      'Log-in',
                       style: TextStyle(
                           color: const Color(
                             0xFF8652FF,
@@ -75,31 +57,19 @@ class SignUp extends StatelessWidget {
                     SizedBox(
                       height: 10.h,
                     ),
-                    textInput(controller: nameController, hint: "Name"),
-                    SizedBox(
-                      height: 10.h,
-                    ),
                     textInput(
-                        controller: emailController, hint: "Email Address"),
+                        controller: passwordController, hint: "Mobile Number"),
                     SizedBox(
-                      height: 10.h,
-                    ),
-                    textInput(controller: passwordController, hint: "Password"),
-                    SizedBox(
-                      height: 10.h,
+                      height: 30.h,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        InkWell(
-                          onTap: () async {
-                            signup(
-                                emailController.text, passwordController.text);
-                            // sendOtp();
-
-                            Get.to(MyPhone());
+                        GestureDetector(
+                          child: (button(text: "Login")),
+                          onTap: () {
+                            Get.to(OtpScreen());
                           },
-                          child: (button(text: "Sign-up")),
                         )
                       ],
                     )
@@ -114,17 +84,17 @@ class SignUp extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: () {
-                      Get.to(Login());
+                      Get.to(SignUp());
                     },
                     child: RichText(
                         text: TextSpan(
                             children: const <TextSpan>[
                           TextSpan(
-                              text: ' Log In',
+                              text: ' Sign-up',
                               style: TextStyle(
                                   color: Colors.blueAccent, fontSize: 18))
                         ],
-                            text: 'Already have an account? ',
+                            text: 'Don’t have an account?  ',
                             style: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 color: Colors.black,

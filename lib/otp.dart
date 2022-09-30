@@ -1,10 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:thirdeye/safety.dart';
 import 'package:thirdeye/widgets/button2.dart';
+import 'package:thirdeye/widgets/textInput.dart';
 
 class OtpScreen extends StatelessWidget {
-  const OtpScreen({Key? key}) : super(key: key);
+  final title = Get.arguments as String;
+  TextEditingController mobileController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,19 +38,30 @@ class OtpScreen extends StatelessWidget {
             height: 30.h,
           ),
           Text(
-            "Enter the OTP Code we sent to your \nMail",
+            "Enter the OTP Code we sent to your Mobile Number",
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 18.51.sp, fontWeight: FontWeight.w300),
           ),
           SizedBox(
             height: 30.h,
           ),
+
+          //   await FirebaseAuth.instance.verifyPhoneNumber(
+          // phoneNumber: '${mobileController.text}',
+          //   verificationCompleted:
+          //       (PhoneAuthCredential credential) {},
+          //   verificationFailed: (FirebaseAuthException e) {},
+          //   codeSent:
+          //       (String verificationId, int? resendToken) {},
+          //   codeAutoRetrievalTimeout:
+          //       (String verificationId) {},
+          // );
           Container(
             height: 46.h,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(45.sp))),
             child: OtpTextField(
-              numberOfFields: 5,
+              numberOfFields: 6,
               borderRadius: BorderRadius.all(Radius.circular(45.sp)),
 
               borderColor: Color(0xFF512DA8),
@@ -61,7 +78,7 @@ class OtpScreen extends StatelessWidget {
                     builder: (context) {
                       return AlertDialog(
                         title: Text("Verification Code"),
-                        content: Text('Code entered is $verificationCode'),
+                        content: Text('Code entered  $verificationCode'),
                       );
                     });
               }, // end onSubmit
@@ -70,7 +87,19 @@ class OtpScreen extends StatelessWidget {
           SizedBox(
             height: 40.h,
           ),
-          button2(),
+          GestureDetector(
+            child: button2(),
+            onTap: () async {
+              await FirebaseAuth.instance.verifyPhoneNumber(
+                phoneNumber: '${title}',
+                verificationCompleted: (PhoneAuthCredential credential) {},
+                verificationFailed: (FirebaseAuthException e) {},
+                codeSent: (String verificationId, int? resendToken) {},
+                codeAutoRetrievalTimeout: (String verificationId) {},
+              );
+              Get.to(Safety());
+            },
+          ),
         ],
       ),
     ));
